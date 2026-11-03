@@ -1,0 +1,16 @@
+{
+	"authors": [
+		"Vital Fadeev"
+	],
+	"copyright": "Copyright © 2026, Vital Fadeev",
+	"description": "A minimal D application.",
+	"license": "GPL-3.0-or-later",
+	"name": "vf9",
+	"dflags-linux-dmd" : ["-P-I/usr/include/SDL3","-P-I/usr/include/SDL3_ttf"],
+	"dflags-linux-ldc" : ["-P-I/usr/include/SDL3","-P-I/usr/include/SDL3_ttf","-preview=bitfields","--link-defaultlib-shared"],
+	"importPaths-gdc"  : ["/usr/include/SDL3","/usr/include/SDL3_ttf"],
+	"libs"             : ["sdl3","sdl3-ttf","sdl3-image","fontconfig"],
+	"dflags"           : [ "-mixin=mixins.d" ],
+	"buildOptions"     : ["ignoreDeprecations"],
+	"versions"         : ["GUI","SDL","INPUT_SDL","SDLTTF","SDLMIXER_","FONTCONFIG","RENDERER_SDL"],
+}

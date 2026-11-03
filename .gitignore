@@ -1,0 +1,17 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/vf9
+vf9.so
+vf9.dylib
+vf9.dll
+vf9.a
+vf9.lib
+vf9-test-*
+*.exe
+*.pdb
+*.o
+*.obj
+*.lst
+mixins.d

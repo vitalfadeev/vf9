@@ -1,0 +1,2 @@
+#!/bin/sh
+dub build --compiler=ldc2 --build=release
