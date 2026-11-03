@@ -7,13 +7,16 @@ import vf.ui.control;
 import vf.ui.label;
 import vf.ui.row;
 import vf.std.color        : Color;
+import std.conv : to;
 version (SDL) import vf.sdl.importc_sdl;
 version (SDLTTF) import vf.sdl.fonts;
+const float SCROLL_SENSITIVITY = 25.0f; 
 
 class
 ListView : Control {
     ListViewArgs args;
     ListStyle style;
+    int scroll_y;
     // delegates
     ON_CLICK_DG on_click;
     alias ON_CLICK_DG = void delegate (ListView listview, SDL_MouseButtonEvent* evt);
@@ -48,6 +51,7 @@ ListView : Control {
         }
 
         Xy xy = xywh.xy;
+        xy.y += scroll_y;
         foreach (c; controls.norecursive) {
             // set c.xy
             c.set_xy (xy);
@@ -113,37 +117,35 @@ ListView : Control {
     override
     void
     sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
-        with (evt) {
-            if (direction == SDL_MOUSEWHEEL_NORMAL) {
-                if (y > 0) {
-                    on_scroll_up (evt);
-                }
-                else 
-                if (y < 0) {
-                    on_scroll_down (evt);
-                }
-            }
-            else
-            if (direction == SDL_MOUSEWHEEL_FLIPPED) {
-                if (y < 0) {
-                    on_scroll_up (evt);
-                }
-                else 
-                if (y > 0) {
-                    on_scroll_down (evt);
-                }
-            }
-        }
+        float delta_y = evt.y;
+        if (evt.direction == SDL_MOUSEWHEEL_FLIPPED)
+            delta_y *= -1.0f;
+
+        float displacement = delta_y * SCROLL_SENSITIVITY;
+
+        scroll_y += displacement.to!int;
+
+        request_update();
+
+        //if (delta_y > 0) {
+        //    on_scroll_up (evt);
+        //}
+        //else 
+        //if (delta_y < 0) {
+        //    on_scroll_down (evt);
+        //}
     }
 
     void
     on_scroll_up (SDL_MouseWheelEvent* evt) {
-        //
+        scroll_y -= 3;
+        request_update();
     }
 
     void
     on_scroll_down (SDL_MouseWheelEvent* evt) {
-        //
+        scroll_y += 3;
+        request_update();
     }
 }
 

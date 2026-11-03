@@ -1,5 +1,6 @@
 module vf.ui.window;
 
+import std.stdio;
 import vf.std.xywh                      : Xy,Wh,Xywh;
 import vf.ui.window;
 import vf.ui.page;
@@ -128,7 +129,7 @@ Window {
 
     void
     sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
-        auto xy = Xy (evt.integer_x, evt.integer_y);
+        auto xy = Xy (evt.mouse_x, evt.mouse_y);
         if (page)
         if (page.xywh.has (xy)) {
             page.sdl_event_mouse_wheel (evt);

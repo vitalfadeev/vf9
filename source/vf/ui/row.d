@@ -1,5 +1,6 @@
 module vf.ui.row;
 
+import std.stdio;
 import vf.std.color        : Color;
 import vf.ui.control;
 import vf.ui.renderer;
@@ -13,6 +14,13 @@ Row : Control {
 
     this (RowArgs args) {
         this.args = args;
+        controls = args.controls;
+        min_wh.w = 32;
+        min_wh.h = 32;
+    }
+    this (RowArgs args, RowStyle style) {
+        this.args = args;
+        this.style = style;
         controls = args.controls;
         min_wh.w = 32;
         min_wh.h = 32;
@@ -100,6 +108,17 @@ Row : Control {
             }
         }
     }
+
+    override
+    void
+    sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
+        auto xy = Xy (evt.mouse_x, evt.mouse_y);
+        foreach (c; controls.norecursive) {
+            if (c.xywh.has (xy)) {
+                c.sdl_event_mouse_wheel (evt);
+            }
+        }
+    }    
 }
 
 struct

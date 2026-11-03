@@ -1,5 +1,6 @@
 module vf.ui.page;
 
+import std.stdio;
 import vf.std.xywh                      : Xy,Wh,Xywh;
 import vf.std.color        : Color;
 import vf.ui.control;
@@ -83,12 +84,10 @@ Page : Control {
     override
     void
     sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
-        with (evt) {
-            auto xy = Xy (integer_x, integer_y);
-            foreach (c; controls.norecursive) {
-                if (c.xywh.has (xy)) {
-                    c.sdl_event_mouse_wheel (evt);
-                }
+        auto xy = Xy (evt.mouse_x, evt.mouse_y);
+        foreach (c; controls.norecursive) {
+            if (c.xywh.has (xy)) {
+                c.sdl_event_mouse_wheel (evt);
             }
         }
     }

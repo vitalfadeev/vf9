@@ -10,6 +10,7 @@ import vf.ui.window;
 import vf.ui.page;
 import vf.ui.button;
 import vf.ui.label;
+import vf.ui.ui_events;
 version (SDL) import vf.sdl.input       : Input;
 version (SDL) import vf.sdl.importc_sdl;
 version (SDL) import vf.sdl.log_event : log_event;
@@ -75,6 +76,9 @@ App {
 		page.add(
 			new Row (RowArgs(
 				controls           : [listview],
+			),
+			RowStyle (
+				fixed_wh: Wh(0,350)
 			))
 		);
 
@@ -97,6 +101,7 @@ App {
 	    switch (evt.type) with (SDL_EventType) {
 	        case SDL_EVENT_QUIT 		  : this.SDL_EVENT_QUIT (&evt.quit); break;
 	    	case SDL_EVENT_WINDOW_EXPOSED : window.draw (renderer); break; // event.window.windowID
+	    	case UI_EVENT_REQUEST_UPDATE  : window.update(renderer); window.draw (renderer); break; // event.window.windowID
 	        default: 
 	    }
 

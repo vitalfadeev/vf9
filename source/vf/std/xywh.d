@@ -34,6 +34,15 @@ struct {
     uint y;
 }
 }
+    this (uint w, uint h) {
+        this.w = w;
+        this.h = h;
+    }
+    this (Wh wh) {
+        this.w = wh.w;
+        this.h = wh.h;
+    }
+
     void opAssign (uint b) { a = b &0xFFFF; }
 }
 

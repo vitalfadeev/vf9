@@ -2,6 +2,7 @@ module vf.ui.control;
 
 import vf.std.xywh                      : Xy,Wh,Xywh;
 import vf.ui.renderer;
+import vf.ui.ui_events;
 version (SDL) import vf.sdl.importc_sdl;
 version (SDLTTF) import vf.sdl.fonts;
 
@@ -91,6 +92,13 @@ Control {
             end:
             return null;
         }
+    }
+
+    void
+    request_update () {
+        SDL_Event event;
+        event.type = UI_EVENT_REQUEST_UPDATE;
+        SDL_PushEvent(&event);
     }
 
     void 
