@@ -60,7 +60,8 @@ ListView : Control {
             c.update (renderer);
 
             // next c.xy
-            xy.y += c.xywh.h;
+            xy.y += c.xywh.h;  
+            xy.y -= 1;// merge borders
         }
     }
 
