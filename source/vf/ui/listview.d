@@ -81,6 +81,25 @@ ListView : Control {
         }
 
         renderer.set_clip_rect (old_clip);
+
+        // ScrollBar
+        draw_scrollbar (renderer);
+    }
+
+    void
+    draw_scrollbar (Renderer renderer) {
+        int sb_w = 32;
+        int sb_h = xywh.h;
+        int sb_x = xywh.w - sb_w;
+        int sb_y = xywh.y;
+
+        Color    fg;
+        Color    bg;
+        fg = 0xFFCCCCCC;  // 5
+        bg = 0xFFAAAAAA;  // 2
+
+        if (sb_w > 0 && sb_h > 0)
+            renderer.draw_rect (sb_x,sb_y,sb_w,sb_h,fg,bg);
     }
 
     override
@@ -96,6 +115,16 @@ struct
 ListViewArgs {
     bool expand = true;
     int  height = 350;
+    ScrollMode scroll = ScrollMode.ALWAYS;
+}
+
+enum
+ScrollMode {
+    NONE,
+    AUTO,
+    ALWAYS,
+    HIDDEN,
+    ADAPTIVE,
 }
 
 struct
