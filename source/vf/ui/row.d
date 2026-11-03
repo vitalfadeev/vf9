@@ -8,15 +8,12 @@ version (SDL) import vf.sdl.importc_sdl;
 
 class
 Row : Control {
-    MainAxisAlignment  alignment;
-    CrossAxisAlignment vertical_alignment;
-    int                spacing;
+    RowArgs  args;
+    RowStyle style;
 
     this (RowArgs args) {
-        controls           = args.controls;
-        alignment          = args.alignment;
-        vertical_alignment = args.vertical_alignment;
-        spacing            = args.spacing;
+        this.args = args;
+        controls = args.controls;
         min_wh.w = 32;
         min_wh.h = 32;
     }
@@ -25,8 +22,11 @@ Row : Control {
     void
     set_xy (Xy xy) {
         super.set_xy (xy);
-        foreach (/* Button, ListView */ c; controls.norecursive)
-            c.set_xy (xy);
+        Xy _xy = xy;
+        _xy.x += style.padding * style.padding_x_scale;
+        _xy.y += style.padding;
+        foreach (c; controls.norecursive)
+            c.set_xy (_xy);
     }
 
     override
@@ -44,6 +44,8 @@ Row : Control {
         }
 
         Xy xy = xywh.xy;
+        xy.x += style.padding * style.padding_x_scale;
+        xy.y += style.padding;
         Wh wh = min_wh;
         foreach (c; controls.norecursive) {
             // set c.xy
@@ -103,3 +105,8 @@ RowArgs {
     int                spacing;
 }
 
+struct
+RowStyle {
+    int padding;
+    int padding_x_scale = 4;
+}

@@ -1,4 +1,5 @@
 import std.stdio;
+import std.path : baseName; // Нужен для очистки пути
 import vf.std.xywh                      : Xy,Wh,Xywh;
 import vf.std.color        : Color;
 import vf.ui.control;
@@ -16,6 +17,7 @@ version (SDL) import vf.sdl.window_flags;
 version (SDL) import vf.sdl.exceptions;
 version (SDLTTF) import vf.sdl.fonts;
 version (SDLTTF) import vf.sdl.importc_sdl_ttf;
+import backend;
 
 void 
 main () {
@@ -52,17 +54,20 @@ App {
 
 		auto button3 = new Button ("Text 3");
 		auto button4 = new Button ("Text 4");
+		auto button5 = new Button ("Text 5");
 		page.add(
 			new Row (RowArgs(
-				controls           : [button3, button4, ],
+				controls           : [button3, button4, button5, ],
 			))
 		);
 
 		auto listview = new ListView (ListViewArgs(expand:true, height:350));
-		foreach (a; 0..20) {
-			listview.add(
-				new Row (RowArgs(controls: []))
-			);		    
+		writeln("Перебор через Iter_files и opApply:");
+		auto back_end = new Backend ();
+		foreach (/*DirEntry*/ entry; back_end.iter_files()) {
+			auto row = new Row (RowArgs(controls: [new Label (baseName(entry.name), fonts.s[5])]));
+			row.style.padding = 3;
+			listview.add(row);		    
 		}
 
 		page.add(
