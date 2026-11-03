@@ -1,6 +1,7 @@
 module vf.ui.renderer;
 
 import vf.std.color        : Color;
+import vf.std.xywh : Xywh;
 import vf.ui.window;
 version (SDLTTF) import vf.sdl.fonts;
 version (SDLTTF) import vf.sdl.importc_sdl_ttf;
@@ -54,6 +55,34 @@ Renderer {
         TTF_GetTextSize(_ttf_text, size_w, size_h);
     
         TTF_DestroyText(_ttf_text);
+    }
+
+    void
+    set_clip_rect (Xywh xywh) {
+        SDL_Rect clipRect;
+        clipRect.x = xywh.x;
+        clipRect.y = xywh.y;
+        clipRect.w = xywh.w;
+        clipRect.h = xywh.h;
+        if (xywh.w && xywh.h)
+            SDL_SetRenderClipRect (_renderer, &clipRect);
+        else
+            SDL_SetRenderClipRect (_renderer, null);
+    }
+
+    Xywh
+    get_clip_rect () {
+        SDL_Rect clipRect;
+
+        SDL_GetRenderClipRect (_renderer, &clipRect);
+
+        Xywh xywh;
+        xywh.x = clipRect.x;
+        xywh.y = clipRect.y;
+        xywh.w = clipRect.w;
+        xywh.h = clipRect.h;
+
+        return xywh;
     }
 
     void

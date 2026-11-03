@@ -47,9 +47,6 @@ App {
 		page.add(
 			new Row (RowArgs(
 				controls           : [button1, button2, ],
-				alignment          : MainAxisAlignment.START,
-				vertical_alignment : CrossAxisAlignment.CENTER,
-				spacing            : 10
 			))
 		);
 
@@ -58,28 +55,19 @@ App {
 		page.add(
 			new Row (RowArgs(
 				controls           : [button3, button4, ],
-				alignment          : MainAxisAlignment.START,
-				vertical_alignment : CrossAxisAlignment.CENTER,
-				spacing            : 10
 			))
 		);
 
 		auto listview = new ListView (ListViewArgs(expand:true, height:350));
-		//listview.add(
-		//	new Row (RowArgs(
-		//		controls           : [],
-		//		alignment          : MainAxisAlignment.START,
-		//		vertical_alignment : CrossAxisAlignment.CENTER,
-		//		spacing            : 10
-		//	))
-		//);
+		foreach (a; 0..20) {
+			listview.add(
+				new Row (RowArgs(controls: []))
+			);		    
+		}
 
 		page.add(
 			new Row (RowArgs(
 				controls           : [listview],
-				alignment          : MainAxisAlignment.START,
-				vertical_alignment : CrossAxisAlignment.CENTER,
-				spacing            : 10
 			))
 		);
 

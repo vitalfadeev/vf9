@@ -72,9 +72,15 @@ ListView : Control {
         if (w > 0 && h > 0)
             renderer.draw_rect (x,y,w,h,fg,bg);
 
+        // clipped
+        auto old_clip = renderer.get_clip_rect ();
+        renderer.set_clip_rect (xywh);
+
         foreach (c; controls.norecursive) {
             c.draw (renderer);
         }
+
+        renderer.set_clip_rect (old_clip);
     }
 
     override
