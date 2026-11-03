@@ -40,11 +40,11 @@ ListView : Control {
         // wh
         // xy
         // push draw
-        if (xywh.wh.h < min_wh.h) {
-            xywh.wh.h = min_wh.h;
-        }
         if (xywh.wh.w < min_wh.w) {
             xywh.wh.w = min_wh.w;
+        }
+        if (xywh.wh.h < min_wh.h) {
+            xywh.wh.h = min_wh.h;
         }
 
         Xy xy = xywh.xy;

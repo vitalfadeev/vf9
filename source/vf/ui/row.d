@@ -36,17 +36,22 @@ Row : Control {
         // push draw
         // in draw
         //   xy
-        if (xywh.wh.h < min_wh.h) {
-            xywh.wh.h = min_wh.h;
-        }
+        if (style.fixed_wh.w)
+            xywh.wh.w = style.fixed_wh.w;
+        if (style.fixed_wh.h)
+            xywh.wh.h = style.fixed_wh.h;
+
         if (xywh.wh.w < min_wh.w) {
             xywh.wh.w = min_wh.w;
+        }
+        if (xywh.wh.h < min_wh.h) {
+            xywh.wh.h = min_wh.h;
         }
 
         Xy xy = xywh.xy;
         xy.x += style.padding * style.padding_x_scale;
         xy.y += style.padding;
-        Wh wh = min_wh;
+        Wh wh = xywh.wh;
         foreach (c; controls.norecursive) {
             // set c.xy
             c.set_xy (xy);
@@ -109,4 +114,5 @@ struct
 RowStyle {
     int padding;
     int padding_x_scale = 4;
+    Wh  fixed_wh;
 }
