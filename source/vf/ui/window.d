@@ -96,6 +96,7 @@ Window {
         switch (evt.type) with (SDL_EventType) {
             case SDL_EVENT_MOUSE_BUTTON_DOWN   : sdl_event_mouse_button_down  (&evt.button); break;
             case SDL_EVENT_KEY_DOWN            : sdl_event_key_down  (&evt.key); break;
+            case SDL_EVENT_MOUSE_WHEEL         : sdl_event_mouse_wheel (&evt.wheel); break;
             default                            : 
         }
     }
@@ -122,6 +123,15 @@ Window {
             SDL_Window* target_window = SDL_GetWindowFromID(evt.windowID);
             if (target_window)
                 send_quit ();
+        }
+    }
+
+    void
+    sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
+        auto xy = Xy (evt.integer_x, evt.integer_y);
+        if (page)
+        if (page.xywh.has (xy)) {
+            page.sdl_event_mouse_wheel (evt);
         }
     }
 

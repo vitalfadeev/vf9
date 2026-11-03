@@ -38,6 +38,11 @@ Control {
         //
     }
 
+    void
+    sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
+        //
+    }
+    
     auto
     recursive () {
         return Recursive (this);

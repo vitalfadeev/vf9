@@ -109,6 +109,42 @@ ListView : Control {
         if (on_click)
             on_click (this, evt);
     }
+
+    override
+    void
+    sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
+        with (evt) {
+            if (direction == SDL_MOUSEWHEEL_NORMAL) {
+                if (y > 0) {
+                    on_scroll_up (evt);
+                }
+                else 
+                if (y < 0) {
+                    on_scroll_down (evt);
+                }
+            }
+            else
+            if (direction == SDL_MOUSEWHEEL_FLIPPED) {
+                if (y < 0) {
+                    on_scroll_up (evt);
+                }
+                else 
+                if (y > 0) {
+                    on_scroll_down (evt);
+                }
+            }
+        }
+    }
+
+    void
+    on_scroll_up (SDL_MouseWheelEvent* evt) {
+        //
+    }
+
+    void
+    on_scroll_down (SDL_MouseWheelEvent* evt) {
+        //
+    }
 }
 
 struct

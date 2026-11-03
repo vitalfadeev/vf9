@@ -79,4 +79,17 @@ Page : Control {
             }
         }
     }
+
+    override
+    void
+    sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
+        with (evt) {
+            auto xy = Xy (integer_x, integer_y);
+            foreach (c; controls.norecursive) {
+                if (c.xywh.has (xy)) {
+                    c.sdl_event_mouse_wheel (evt);
+                }
+            }
+        }
+    }
 }
