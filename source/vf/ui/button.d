@@ -28,7 +28,7 @@ Button : Control {
     set_xy (Xy xy) {
         super.set_xy (xy);
         Xy _xy = xy;
-        _xy.x += style.padding * style.padding_x_scale;
+        _xy.x += style.padding_x;
         _xy.y += style.padding;
         foreach (c; controls.norecursive)
             c.set_xy (_xy);
@@ -44,7 +44,7 @@ Button : Control {
             c.update (renderer);
 
             xywh.wh = c.xywh.wh;  // from label
-            xywh.wh.w += style.padding * style.padding_x_scale * 2; // left and right
+            xywh.wh.w += style.padding_x * 2; // left and right
             if (xywh.wh.w < min_wh.w)
                 xywh.wh.w = min_wh.w;
             if (xywh.wh.h < min_wh.h)
@@ -81,5 +81,5 @@ Button : Control {
 struct
 ButtonStyle {
     int padding = 3;
-    int padding_x_scale = 4;
+    int padding_x = 18;
 }

@@ -67,8 +67,8 @@ App {
 		foreach (/*DirEntry*/ entry; back_end.iter_files()) {
 			auto row = new Row (RowArgs(controls: [new Label (baseName(entry.name), fonts.s[5])]));
 			row.style.fixed_wh.h = 48;
-			row.style.padding = 10;
-			row.style.padding_x_scale = 3;
+			row.style.padding = 11;
+			row.style.padding_x = 22;
 			listview.add(row);		    
 		}
 

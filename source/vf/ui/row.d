@@ -23,7 +23,7 @@ Row : Control {
     set_xy (Xy xy) {
         super.set_xy (xy);
         Xy _xy = xy;
-        _xy.x += style.padding * style.padding_x_scale;
+        _xy.x += style.padding_x;
         _xy.y += style.padding;
         foreach (c; controls.norecursive)
             c.set_xy (_xy);
@@ -49,7 +49,7 @@ Row : Control {
         }
 
         Xy xy = xywh.xy;
-        xy.x += style.padding * style.padding_x_scale;
+        xy.x += style.padding_x;
         xy.y += style.padding;
         Wh wh = xywh.wh;
         foreach (c; controls.norecursive) {
@@ -113,6 +113,6 @@ RowArgs {
 struct
 RowStyle {
     int padding;
-    int padding_x_scale = 4;
+    int padding_x = 4;
     Wh  fixed_wh;
 }
