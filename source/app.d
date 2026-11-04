@@ -19,6 +19,7 @@ version (SDL) import vf.sdl.exceptions;
 version (SDLTTF) import vf.sdl.fonts;
 version (SDLTTF) import vf.sdl.importc_sdl_ttf;
 import backend;
+import mpv_backend : Mpv_backend;
 
 void 
 main () {
@@ -32,6 +33,7 @@ App {
 	bool   _run;
 	Window   window;
 	Renderer renderer;
+	Mpv_backend mpv_backend;
 
 	void
 	run () {
@@ -41,6 +43,12 @@ App {
 		INIT_WINDOW ();
 		INIT_RENDERER (window);
 		INIT_FONTS ();
+		mpv_backend._init ();
+		scope(exit) {
+			mpv_backend._exit ();
+		}
+		mpv_backend.config ();
+		mpv_backend.init_player ();
 
 		auto page = new Page ();
 		window.add (page);
@@ -67,9 +75,13 @@ App {
 		auto back_end = new Backend ();
 		foreach (/*DirEntry*/ entry; back_end.iter_files()) {
 			auto row = new Row (RowArgs(controls: [new Label (baseName(entry.name), fonts.s[5])]));
+			row.id = entry.name;
 			row.style.fixed_wh.h = 48;
 			row.style.padding = 11;
 			row.style.padding_x = 22;
+			row.on_click = (row,evt) {
+				mpv_backend.play_file (row.id);
+			};
 			listview.add(row);		    
 		}
 

@@ -96,6 +96,7 @@ Window {
     do_switch (SDL_Event* evt) {
         switch (evt.type) with (SDL_EventType) {
             case SDL_EVENT_MOUSE_BUTTON_DOWN   : sdl_event_mouse_button_down  (&evt.button); break;
+            case SDL_EVENT_MOUSE_BUTTON_UP     : sdl_event_mouse_button_up    (&evt.button); break;
             case SDL_EVENT_KEY_DOWN            : sdl_event_key_down  (&evt.key); break;
             case SDL_EVENT_MOUSE_WHEEL         : sdl_event_mouse_wheel (&evt.wheel); break;
             default                            : 
@@ -109,6 +110,17 @@ Window {
             if (page)
             if (page.xywh.has (xy)) {
                 page.sdl_event_mouse_button_down (evt);
+            }
+        }
+    }
+
+    void
+    sdl_event_mouse_button_up (SDL_MouseButtonEvent* evt) {
+        with (evt) {
+            auto xy = Xy (evt.x, evt.y);
+            if (page)
+            if (page.xywh.has (xy)) {
+                page.sdl_event_mouse_button_up (evt);
             }
         }
     }

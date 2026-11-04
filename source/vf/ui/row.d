@@ -11,6 +11,10 @@ class
 Row : Control {
     RowArgs  args;
     RowStyle style;
+    string id;
+    bool _mouse_button_down;
+    ON_CLICK_DG on_click;
+    alias ON_CLICK_DG = void delegate (Row row, SDL_MouseButtonEvent* evt);
 
     this (RowArgs args) {
         this.args = args;
@@ -83,14 +87,9 @@ Row : Control {
     override
     void
     draw (Renderer renderer) {
-        Color    fg;
-        Color    bg;
-        fg = 0xFFFF8888;  // 5
-        bg = 0xFF222222;  // 2
-
         with (xywh)
         if (w > 0 && h > 0)
-            renderer.draw_rect (x,y,w,h,fg,bg);
+            renderer.draw_rect (x,y,w,h,style.fg,style.bg);
 
         //
         foreach (c; controls.norecursive) {
@@ -101,10 +100,37 @@ Row : Control {
     override
     void
     sdl_event_mouse_button_down (SDL_MouseButtonEvent* evt) {
+        style.bg = 0xFFCCCCCC;  // 2
+        request_update ();
+
         auto xy = Xy (evt.x, evt.y);
         foreach (c; controls.norecursive) {
             if (c.xywh.has (xy)) {
                 c.sdl_event_mouse_button_down (evt);
+            }
+        }
+
+        _mouse_button_down = true;
+    }
+
+    override
+    void
+    sdl_event_mouse_button_up (SDL_MouseButtonEvent* evt) {
+        if (_mouse_button_down) {
+            _mouse_button_down = false;
+
+            style.bg = 0xFF222222;  // 2
+            request_update ();
+
+            if (on_click)
+                on_click (this, evt);
+
+            //
+            auto xy = Xy (evt.x, evt.y);
+            foreach (c; controls.norecursive) {
+                if (c.xywh.has (xy)) {
+                    c.sdl_event_mouse_button_up (evt);
+                }
             }
         }
     }
@@ -118,7 +144,7 @@ Row : Control {
                 c.sdl_event_mouse_wheel (evt);
             }
         }
-    }    
+    }
 }
 
 struct
@@ -131,6 +157,8 @@ RowArgs {
 
 struct
 RowStyle {
+    Color fg = 0xFFFF8888;
+    Color bg = 0xFF222222;
     int padding;
     int padding_x = 4;
     Wh  fixed_wh;

@@ -40,6 +40,11 @@ Control {
     }
 
     void
+    sdl_event_mouse_button_up (SDL_MouseButtonEvent* evt) {
+        //
+    }
+
+    void
     sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
         //
     }

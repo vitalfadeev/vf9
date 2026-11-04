@@ -83,6 +83,19 @@ Page : Control {
 
     override
     void
+    sdl_event_mouse_button_up (SDL_MouseButtonEvent* evt) {
+        with (evt) {
+            auto xy = Xy (evt.x, evt.y);
+            foreach (c; controls.norecursive) {
+                if (c.xywh.has (xy)) {
+                    c.sdl_event_mouse_button_up (evt);
+                }
+            }
+        }
+    }
+
+    override
+    void
     sdl_event_mouse_wheel (SDL_MouseWheelEvent* evt) {
         auto xy = Xy (evt.mouse_x, evt.mouse_y);
         foreach (c; controls.norecursive) {

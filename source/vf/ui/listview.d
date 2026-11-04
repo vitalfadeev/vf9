@@ -110,9 +110,23 @@ ListView : Control {
     override
     void
     sdl_event_mouse_button_down (SDL_MouseButtonEvent* evt) {
-        writeln (this);
-        if (on_click)
-            on_click (this, evt);
+        auto xy = Xy (evt.x, evt.y);
+        foreach (c; controls.norecursive) {
+            if (c.xywh.has (xy)) {
+                c.sdl_event_mouse_button_down (evt);
+            }
+        }
+    }
+
+    override
+    void
+    sdl_event_mouse_button_up (SDL_MouseButtonEvent* evt) {
+        auto xy = Xy (evt.x, evt.y);
+        foreach (c; controls.norecursive) {
+            if (c.xywh.has (xy)) {
+                c.sdl_event_mouse_button_up (evt);
+            }
+        }
     }
 
     override
