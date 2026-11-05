@@ -34,6 +34,7 @@ App {
 	Window   window;
 	Renderer renderer;
 	Mpv_backend mpv_backend;
+	ListView listview; // Выносим в поля класса для доступа из do_switch
 
 	void
 	run () {
@@ -70,19 +71,23 @@ App {
 			))
 		);
 
-		auto listview = new ListView (ListViewArgs(expand:true, height:350));
-		writeln("Перебор через Iter_files и opApply:");
+		listview = new ListView (ListViewArgs(expand:true, height:350));
 		auto back_end = new Backend ();
-		foreach (/*DirEntry*/ entry; back_end.iter_files()) {
-			auto row = new Row (RowArgs(controls: [new Label (baseName(entry.name), fonts.s[5])]));
-			row.id = entry.name;
-			row.style.fixed_wh.h = 48;
-			row.style.padding = 11;
-			row.style.padding_x = 22;
-			row.on_click = (row,evt) {
-				mpv_backend.play_file (row.id);
-			};
-			listview.add(row);		    
+		
+		foreach (entry; back_end.iter_files()) {
+		    auto row = new Row (RowArgs(controls: [new Label (baseName(entry.name), fonts.s[5])]));
+		    row.id = entry.name;
+		    row.style.fixed_wh.h = 48;
+		    row.style.padding = 11;
+		    row.style.padding_x = 22;
+		    
+		    row.on_click = (clickedRow, evt) {
+		        mpv_backend.play_file(clickedRow.id);
+		        // Принудительно генерируем событие обновления, чтобы сразу перерисовать UI
+		        import vf.sdl.importc_sdl : SDL_Event, SDL_PushEvent;
+		        SDL_Event uEvt; uEvt.type = UI_EVENT_REQUEST_UPDATE; SDL_PushEvent(&uEvt);
+		    };
+		    listview.add(row);            
 		}
 
 		page.add(
@@ -106,19 +111,46 @@ App {
 	    }
 	}
 
-	void
-	do_switch (SDL_Event* evt) {
+	void do_switch (SDL_Event* evt) {
 	    log_event (evt);
 
 	    switch (evt.type) with (SDL_EventType) {
-	        case SDL_EVENT_QUIT 		  : this.SDL_EVENT_QUIT (&evt.quit); break;
-	    	case SDL_EVENT_WINDOW_EXPOSED : window.draw (renderer); break; // event.window.windowID
-	    	case UI_EVENT_REQUEST_UPDATE  : window.update(renderer); window.draw (renderer); break; // event.window.windowID
+	        case SDL_EVENT_QUIT: 
+	            this.SDL_EVENT_QUIT (&evt.quit); 
+	            break;
+	            
+	        case SDL_EVENT_WINDOW_EXPOSED: 
+	            window.draw (renderer); 
+	            break;
+	            
+	        case UI_EVENT_REQUEST_UPDATE: 
+	            // 1. Очищаем очередь событий mpv в контексте главного потока
+	            mpv_backend.drain_events(); 
+	            
+	            // 2. Логика подсветки активного трека
+	            if (listview) {
+	                foreach (control; listview.controls.norecursive) { // Предполагается, что у ListView есть доступ к дочерним элементам
+	                    if (auto row = cast(Row)control) {
+	                        if (row.id == mpv_backend.current_playing_id) {
+	                            // Подсвечиваем активный (например, серым/синим цветом)
+	                            row.style.bg = Color(40, 120, 200, 255); 
+	                        } else {
+	                            // Сбрасываем цвет для остальных (например, прозрачный или дефолтный)
+	                            row.style.bg = Color(0, 0, 0, 0); 
+	                        }
+	                    }
+	                }
+	            }
+	            
+	            window.update(renderer); 
+	            window.draw (renderer); 
+	            break;
+	            
 	        default: 
 	    }
 
 	    if (window) 
-	    	window.do_switch (evt);
+	        window.do_switch (evt);
 	}
 
 	void
