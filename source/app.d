@@ -145,7 +145,12 @@ App {
 	            window.update(renderer); 
 	            window.draw (renderer); 
 	            break;
-	            
+
+	        //case MPV_EVENT_FILE_LOADED:
+	        //    // Файл полностью загружен, можно проверять обложку
+	        //    // Здесь вызывайте логику добавления заглушки
+	        //    break;
+	                	            
 	        default: 
 	    }
 

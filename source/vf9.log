@@ -1,0 +1,394 @@
+     Warning 
+     Warning ## Warning for package vf9 ##
+     Warning 
+     Warning The following compiler flags have been specified in the package description
+     Warning file. They are handled by DUB and direct use in packages is discouraged.
+     Warning Alternatively, you can set the DFLAGS environment variable to pass custom flags
+     Warning to the compiler, or use one of the suggestions below:
+     Warning 
+     Warning ignoreDeprecations: Use "buildRequirements" to control the deprecation warning level
+     Warning 
+    Starting Performing "debug" build using ldc2 for x86_64.
+    Building vf9 ~master: building configuration [application]
+     Linking vf9
+     Running vf9 
+Available renderer drivers:
+1. opengl
+2. opengles2
+3. vulkan
+4. gpu
+5. software
+Edit source/app.d to start your project.
+Инициализация библиотеки libmpv...
+Путь к заглушке валиден: /home/vf/src/vf9/res/nocover.png
+[cplayer] mpv v0.40.0 Copyright © 2000-2025 mpv/MPlayer/mplayer2 projects
+[cplayer] libplacebo version: v7.349.0
+[cplayer] FFmpeg version: 7.1.2-0+deb13u1 (runtime 7.1.5-0+deb13u1)
+[cplayer] FFmpeg library versions:
+[cplayer]    libavcodec      61.19.101
+[cplayer]    libavdevice     61.3.100
+[cplayer]    libavfilter     10.4.100 (runtime 10.5.100)
+[cplayer]    libavformat     61.7.100 (runtime 61.7.103)
+[cplayer]    libavutil       59.39.100
+[cplayer]    libswresample   5.3.100
+[cplayer]    libswscale      8.3.100
+[cplayer] Configuration: -Dpython.bytecompile=-1 -Dlibmpv=true -Dbuild-date=false -Dcdda=enabled -Ddvdnav=enabled -Dsdl2=enabled -Ddvbin=enabled -Dprefix=/usr -Dlibdir=lib/x86_64-linux-gnu -Dlocalstatedir=/var -Dsysconfdir=/etc -Dbuildtype=plain -Dwrap_mode=nodownload
+[cplayer] List of enabled features: alsa caca cdda cplugins cuda-hwaccel cuda-interop dmabuf-interop-gl dmabuf-wayland drm dvbin dvdnav egl egl-drm egl-wayland egl-x11 ffmpeg ffnvcodec gbm gl glibc-thread-name glob glob-posix gpl iconv jack javascript jpeg lcms2 libarchive libass libavdevice libbluray libdl libplacebo linux-fstatfs lua52 memfd-create memrchr pipewire posix posix-shm ppoll pthread-condattr-setclock pulse rubberband rubberband-3 sdl2 sdl2-audio sdl2-gamepad sdl2-video sixel sndio sndio-1-9 uchardet vaapi vaapi-drm vaapi-wayland vaapi-x11 vdpau vector vk-khr-display vt.h vulkan wayland wayland-protocols-1-32 wayland-protocols-1-38 wayland-protocols-1-39 wayland-protocols-1-41 x11 xv zimg zimg-st428 zlib
+[clipboard/wayland] Registered interface wl_seat at version 8
+[clipboard/wayland] Compositor doesn't support the ext_data_control_manager_v1 protocol!
+[clipboard/wayland] Deregistering seat 0x10
+[clipboard] Initialized vo clipboard backend.
+[cplayer] Waiting for scripts...
+[cplayer] Done loading scripts.
+[vo/gpu] Probing for best GPU context.
+[vo/gpu/auto] Initializing GPU context 'auto'
+[vo/gpu/vulkan] Initializing GPU context 'waylandvk'
+[vo/gpu/libplacebo] Initialized libplacebo v7.349.0 (API v349)
+SDL_EVENT_MOUSE_ADDED
+SDL_EVENT_KEYBOARD_ADDED
+SDL_EVENT_WINDOW_PIXEL_SIZE_CHANGED 4
+SDL_EVENT_WINDOW_SHOWN 4
+SDL_EVENT_WINDOW_EXPOSED 4
+cast(SDL_EventType)32769
+[vo/gpu/libplacebo] Spent 91.467 ms enumerating instance extensions
+[vo/gpu/libplacebo] Creating vulkan instance with extensions:
+[vo/gpu/libplacebo]     VK_KHR_get_physical_device_properties2
+[vo/gpu/libplacebo]     VK_KHR_surface
+[vo/gpu/libplacebo]     VK_EXT_swapchain_colorspace
+[vo/gpu/libplacebo]     VK_KHR_external_memory_capabilities
+[vo/gpu/libplacebo]     VK_KHR_external_semaphore_capabilities
+[vo/gpu/libplacebo]     VK_KHR_get_surface_capabilities2
+[vo/gpu/libplacebo]     VK_KHR_portability_enumeration
+[vo/gpu/libplacebo]     VK_KHR_surface
+[vo/gpu/libplacebo]     VK_KHR_wayland_surface
+Xlib:  extension "NV-GLX" missing on display ":0".
+[vo/gpu/libplacebo] Spent 17.661 ms creating vulkan instance
+[vo/gpu/wayland] Registered interface wl_compositor at version 6
+[vo/gpu/wayland] Registered interface wl_shm at version 1
+[vo/gpu/wayland] Registered interface wl_output at version 4
+[vo/gpu/wayland] Registered interface wl_data_device_manager at version 3
+[vo/gpu/wayland] Registered interface wl_subcompositor at version 1
+[vo/gpu/wayland] Registered interface xdg_wm_base at version 6
+[vo/gpu/wayland] Registered interface wp_viewporter at version 1
+[vo/gpu/wayland] Registered interface wp_fractional_scale_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wl_seat at version 8
+[vo/gpu/wayland] Registered interface zwp_linux_dmabuf_v1 at version 4
+[vo/gpu/wayland] Registered interface wp_single_pixel_buffer_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface zwp_text_input_manager_v3 at version 1
+[vo/gpu/wayland] Registered interface wp_presentation at version 2
+[vo/gpu/wayland] Registered interface xdg_activation_v1 at version 1
+[vo/gpu/wayland] Registered interface zwp_idle_inhibit_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wp_color_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wp_fifo_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wp_cursor_shape_manager_v1 at version 1
+[vo/gpu/wayland] Compositor doesn't support the wp_content_type_manager_v1 protocol!
+[vo/gpu/wayland] Compositor doesn't support the zxdg_decoration_manager_v1 protocol!
+[vo/gpu/wayland] Registered output AUO 0x26ec (0x4):
+[vo/gpu/wayland]    x: 0px, y: 0px
+[vo/gpu/wayland]    w: 1366px (340mm), h: 768px (190mm)
+[vo/gpu/wayland]    scale: 1.000000
+[vo/gpu/wayland]    Hz: 60.014000
+[vo/gpu/wayland] Compositor supports parametric image description creator.
+[vo/gpu/wayland] Compositor supports setting primaries.
+[vo/gpu/wayland] Compositor supports setting transfer functions.
+[vo/gpu/wayland] Compositor supports setting luminances.
+[vo/gpu/wayland] Obtained preferred fractional scale, 1.000000, from the compositor.
+[vo/gpu/wayland] Compositor does not support ICC profiles!
+[vo/gpu/libplacebo] Probing for vulkan devices:
+[vo/gpu/libplacebo] Spent 28.300 ms enumerating physical devices
+[vo/gpu/libplacebo]     GPU 0: llvmpipe (LLVM 19.1.7, 128 bits) v1.4.305 (software)
+[vo/gpu/libplacebo]            uuid: 6D:65:73:61:32:35:2E:30:2E:37:2D:32:2B:64:65:00
+[vo/gpu/libplacebo] Found no suitable device, giving up.
+[vo/gpu/libplacebo] Failed initializing vulkan device
+[vo/gpu/wayland] Deregistering output AUO 0x26ec (0x4)
+[vo/gpu/wayland] Deregistering seat 0x10
+[vo/gpu/vulkan] Initializing GPU context 'x11vk'
+[vo/gpu/libplacebo] Initialized libplacebo v7.349.0 (API v349)
+SDL_EVENT_AUDIO_DEVICE_ADDED
+SDL_EVENT_AUDIO_DEVICE_ADDED
+SDL_EVENT_WINDOW_FOCUS_GAINED 4
+SDL_EVENT_CLIPBOARD_UPDATE
+SDL_EVENT_WINDOW_MOVED 4
+[vo/gpu/libplacebo] Spent 82.173 ms enumerating instance extensions
+[vo/gpu/libplacebo] Creating vulkan instance with extensions:
+[vo/gpu/libplacebo]     VK_KHR_get_physical_device_properties2
+[vo/gpu/libplacebo]     VK_KHR_surface
+[vo/gpu/libplacebo]     VK_EXT_swapchain_colorspace
+[vo/gpu/libplacebo]     VK_KHR_external_memory_capabilities
+[vo/gpu/libplacebo]     VK_KHR_external_semaphore_capabilities
+[vo/gpu/libplacebo]     VK_KHR_get_surface_capabilities2
+[vo/gpu/libplacebo]     VK_KHR_portability_enumeration
+[vo/gpu/libplacebo]     VK_KHR_surface
+[vo/gpu/libplacebo]     VK_KHR_xlib_surface
+Xlib:  extension "NV-GLX" missing on display ":0".
+SDL_EVENT_WINDOW_EXPOSED 4
+[vo/gpu/libplacebo] Spent 17.801 ms creating vulkan instance
+[vo/gpu/x11] X11 opening display: :0
+[vo/gpu/x11] Display 0 (LVDS-1): [0, 0, 1366, 768] @ 59.798991 FPS
+[vo/gpu/x11] Current display FPS: 59.798991
+[vo/gpu/x11] The XPresent extension was found.
+[vo/gpu/x11] XPresent disabled.
+[vo/gpu/libplacebo] Probing for vulkan devices:
+[vo/gpu/libplacebo] Spent 18.338 ms enumerating physical devices
+[vo/gpu/libplacebo]     GPU 0: llvmpipe (LLVM 19.1.7, 128 bits) v1.4.305 (software)
+[vo/gpu/libplacebo]            uuid: 6D:65:73:61:32:35:2E:30:2E:37:2D:32:2B:64:65:00
+[vo/gpu/libplacebo] Found no suitable device, giving up.
+[vo/gpu/libplacebo] Failed initializing vulkan device
+[vo/gpu/opengl] Initializing GPU context 'wayland'
+[vo/gpu/wayland] Registered interface wl_compositor at version 6
+[vo/gpu/wayland] Registered interface wl_shm at version 1
+[vo/gpu/wayland] Registered interface wl_output at version 4
+[vo/gpu/wayland] Registered interface wl_data_device_manager at version 3
+[vo/gpu/wayland] Registered interface wl_subcompositor at version 1
+[vo/gpu/wayland] Registered interface xdg_wm_base at version 6
+[vo/gpu/wayland] Registered interface wp_viewporter at version 1
+[vo/gpu/wayland] Registered interface wp_fractional_scale_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wl_seat at version 8
+[vo/gpu/wayland] Registered interface zwp_linux_dmabuf_v1 at version 4
+[vo/gpu/wayland] Registered interface wp_single_pixel_buffer_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface zwp_text_input_manager_v3 at version 1
+[vo/gpu/wayland] Registered interface wp_presentation at version 2
+[vo/gpu/wayland] Registered interface xdg_activation_v1 at version 1
+[vo/gpu/wayland] Registered interface zwp_idle_inhibit_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wp_color_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wp_fifo_manager_v1 at version 1
+[vo/gpu/wayland] Registered interface wp_cursor_shape_manager_v1 at version 1
+[vo/gpu/wayland] Compositor doesn't support the wp_content_type_manager_v1 protocol!
+[vo/gpu/wayland] Compositor doesn't support the zxdg_decoration_manager_v1 protocol!
+[vo/gpu/wayland] Registered output AUO 0x26ec (0x4):
+[vo/gpu/wayland]    x: 0px, y: 0px
+[vo/gpu/wayland]    w: 1366px (340mm), h: 768px (190mm)
+[vo/gpu/wayland]    scale: 1.000000
+[vo/gpu/wayland]    Hz: 60.014000
+[vo/gpu/wayland] Compositor supports parametric image description creator.
+[vo/gpu/wayland] Compositor supports setting primaries.
+[vo/gpu/wayland] Compositor supports setting transfer functions.
+[vo/gpu/wayland] Compositor supports setting luminances.
+[vo/gpu/wayland] Obtained preferred fractional scale, 1.000000, from the compositor.
+[vo/gpu/wayland] Compositor does not support ICC profiles!
+[vo/gpu/opengl] EGL_VERSION=1.5
+[vo/gpu/opengl] EGL_VENDOR=Mesa Project
+[vo/gpu/opengl] EGL_CLIENT_APIS=OpenGL OpenGL_ES 
+[vo/gpu/opengl] Trying to create Desktop OpenGL context.
+[vo/gpu/wayland] GL_VERSION='3.3 (Core Profile) Mesa 25.0.7-2+deb13u1'
+[vo/gpu/wayland] Detected desktop OpenGL 3.3.
+[vo/gpu/wayland] GL_VENDOR='Intel'
+[vo/gpu/wayland] GL_RENDERER='Mesa Intel(R) HD Graphics 2000 (SNB GT1)'
+[vo/gpu/wayland] GL_SHADING_LANGUAGE_VERSION='3.30'
+[vo/gpu/wayland] Loaded extension GL_ARB_invalidate_subdata.
+[vo/gpu/wayland] Loaded extension GL_ARB_get_program_binary.
+[vo/gpu/wayland] Loaded extension GL_ARB_buffer_storage.
+[vo/gpu/wayland] Loaded extension GL_ARB_arrays_of_arrays.
+[vo/gpu/wayland] Loaded extension GL_ARB_debug_output.
+[vo/gpu/wayland] Loaded extension GL_KHR_debug.
+[vo/gpu] Testing FBO format rgba16f
+[vo/gpu] Using FBO format rgba16f.
+[vo/gpu] Disabling HDR peak computation (one or more of the following is not supported: compute shaders=0, SSBO=0).
+[vo/gpu] correct-downscaling requires non-bilinear scaler.
+[vo/gpu] Resize: 0x0
+[vo/gpu] Assuming 60.014000 FPS for display sync.
+[vo/gpu] reconfig to 960x540 yuv444p auto/auto/auto/auto/auto CL=unknown
+[vo/gpu/wayland] Reconfiguring!
+[vo/gpu] Resize: 960x540
+[vo/gpu] Window size: 960x540 (Borders: l=0 t=0 r=0 b=0)
+[vo/gpu] Video source: 960x540 (1:1)
+[vo/gpu] Video display: (0, 0) 960x540 -> (0, 0) 960x540
+[vo/gpu] Video scale: 1.000000/1.000000
+[vo/gpu] OSD borders: l=0 t=0 r=0 b=0
+[vo/gpu] Video borders: l=0 t=0 r=0 b=0
+[vo/gpu] Texture for plane 0: 960x540
+[vo/gpu] Texture for plane 1: 960x540
+[vo/gpu] Texture for plane 2: 960x540
+[vo/gpu] Testing FBO format rgba16f
+[vo/gpu] Using FBO format rgba16f.
+[vo/gpu/wayland] Handling resize on the egl side
+[vo/gpu] Resize: 960x540
+[vo/gpu] Window size: 960x540 (Borders: l=0 t=0 r=0 b=0)
+[vo/gpu] Video source: 960x540 (1:1)
+[vo/gpu] Video display: (0, 0) 960x540 -> (0, 0) 960x540
+[vo/gpu] Video scale: 1.000000/1.000000
+[vo/gpu] OSD borders: l=0 t=0 r=0 b=0
+[vo/gpu] Video borders: l=0 t=0 r=0 b=0
+[vo/gpu] Reported display depth: 10
+cast(SDL_EventType)32769
+[vo/gpu/wayland] Given data offer with mime type text/plain
+[vo/gpu/wayland] Given data offer with mime type text/plain;charset=utf-8
+[vo/gpu/wayland] Surface entered output AUO 0x26ec (0x4), scale = 1.000000, refresh rate = 60.014000 Hz
+[vo/gpu/wayland] Handling resize on the egl side
+[vo/gpu] Resize: 960x540
+[vo/gpu] Window size: 960x540 (Borders: l=0 t=0 r=0 b=0)
+[vo/gpu] Video source: 960x540 (1:1)
+[vo/gpu] Video display: (0, 0) 960x540 -> (0, 0) 960x540
+[vo/gpu] Video scale: 1.000000/1.000000
+[vo/gpu] OSD borders: l=0 t=0 r=0 b=0
+[vo/gpu] Video borders: l=0 t=0 r=0 b=0
+[vo/gpu] Reported display depth: 10
+[osd/libass] libass API version: 0x1703000
+[osd/libass] libass source: tarball: 0.17.3
+[osd/libass] Shaper: FriBidi 1.0.16 (SIMPLE) HarfBuzz-ng 10.2.0 (COMPLEX)
+[osd/libass] Setting up fonts...
+cast(SDL_EventType)32769
+[osd/libass] Using font provider fontconfig
+[osd/libass] Done.
+[vo/gpu/wayland] Read 49 bytes from the data offer fd
+SDL_EVENT_WINDOW_FOCUS_LOST 4
+SDL_EVENT_WINDOW_EXPOSED 4
+SDL_EVENT_WINDOW_FOCUS_GAINED 4
+SDL_EVENT_CLIPBOARD_UPDATE
+[vo/gpu/wayland] Given data offer with mime type text/plain
+[vo/gpu/wayland] Given data offer with mime type text/plain;charset=utf-8
+SDL_EVENT_WINDOW_FOCUS_LOST 4
+[vo/gpu/wayland] Read 49 bytes from the data offer fd
+SDL_EVENT_WINDOW_FOCUS_GAINED 4
+SDL_EVENT_CLIPBOARD_UPDATE
+[vo/gpu/wayland] Given data offer with mime type text/plain
+[vo/gpu/wayland] Given data offer with mime type text/plain;charset=utf-8
+SDL_EVENT_WINDOW_FOCUS_LOST 4
+[vo/gpu/wayland] Read 49 bytes from the data offer fd
+SDL_EVENT_WINDOW_FOCUS_GAINED 4
+SDL_EVENT_CLIPBOARD_UPDATE
+SDL_EVENT_WINDOW_EXPOSED 4
+SDL_EVENT_WINDOW_EXPOSED 4
+SDL_EVENT_WINDOW_MOUSE_ENTER 4
+SDL_EVENT_MOUSE_BUTTON_DOWN
+cast(SDL_EventType)32769
+cast(SDL_EventType)32769
+SDL_EVENT_MOUSE_BUTTON_UP
+Запуск воспроизведения: /home/vf/Music/vital_fadeev and SUNO/audio [music]_B♭_minor__bpm_102.mp3
+[cplayer] Running hook: auto_profiles/on_before_start_file
+[cplayer] Failed sending hook command auto_profiles/on_before_start_file. Removing hook.
+[cplayer] Running hook: auto_profiles/on_load
+[cplayer] Failed sending hook command auto_profiles/on_load. Removing hook.
+[cplayer] Running hook: ytdl_hook/on_load
+[cplayer] Running hook: ytdl_hook/on_load
+[ytdl_hook] playlist hook
+[ifo_dvdnav] Opening /home/vf/Music/vital_fadeev and SUNO/audio [music]_B♭_minor__bpm_102.mp3
+[bdmv/bluray] Opening /home/vf/Music/vital_fadeev and SUNO/audio [music]_B♭_minor__bpm_102.mp3
+[file] Opening /home/vf/Music/vital_fadeev and SUNO/audio [music]_B♭_minor__bpm_102.mp3
+[demux] Trying demuxers for level=normal.
+[lavf] Found 'mp3' at score=1 size=2048.
+[lavf] Found 'mp3' at score=25 size=4096.
+[lavf] Found 'mp3' at score=51 size=8192.
+[file] stream level seek from 131072 to 15301312
+[file] stream level seek from 15301440 to 0
+[ffmpeg/demuxer] mp3: Estimating duration from bitrate, this may be inaccurate
+[lavf] avformat_find_stream_info() finished after 65536 bytes.
+[demux] Detected file format: mp3 (libavformat)
+[cplayer] Opening done: /home/vf/Music/vital_fadeev and SUNO/audio [music]_B♭_minor__bpm_102.mp3
+[find_files] Loading external files in /home/vf/Music/vital_fadeev and SUNO/
+[cplayer] Running hook: auto_profiles/on_preloaded
+[cplayer] Failed sending hook command auto_profiles/on_preloaded. Removing hook.
+[cplayer] Running hook: ytdl_hook/on_preloaded
+[lavf] select track 0
+[lavf] refresh track 0 (audio)
+[lavf] refresh seek to 0.000000
+● Audio  --aid=1  (mp3 2ch 48000 Hz 320 kbps)
+[ad] Codec list:
+[ad]     mp3float (mp3) - MP3 (MPEG audio layer 3)
+[ad]     mp3 - MP3 (MPEG audio layer 3)
+[ad] Opening decoder mp3float
+[ad] Requesting 1 threads for decoding.
+[ad] Selected decoder: mp3float - MP3 (MPEG audio layer 3)
+[af] User filter list:
+[af]   (empty)
+[lavf] execute seek (to 0.000000 flags 32)
+[lavf] seek done
+[vo/gpu] reconfig to 960x540 yuv444p auto/auto/auto/auto/auto CL=unknown
+[vo/gpu/wayland] Reconfiguring!
+[vo/gpu] Resize: 960x540
+[vo/gpu] Window size: 960x540 (Borders: l=0 t=0 r=0 b=0)
+[vo/gpu] Video source: 960x540 (1:1)
+[vo/gpu] Video display: (0, 0) 960x540 -> (0, 0) 960x540
+[vo/gpu] Video scale: 1.000000/1.000000
+[vo/gpu] OSD borders: l=0 t=0 r=0 b=0
+[vo/gpu] Video borders: l=0 t=0 r=0 b=0
+[vo/gpu] Reported display depth: 10
+[vo/gpu/wayland] Handling resize on the egl side
+[vo/gpu] Resize: 960x540
+[vo/gpu] Window size: 960x540 (Borders: l=0 t=0 r=0 b=0)
+[vo/gpu] Video source: 960x540 (1:1)
+[vo/gpu] Video display: (0, 0) 960x540 -> (0, 0) 960x540
+[vo/gpu] Video scale: 1.000000/1.000000
+[vo/gpu] OSD borders: l=0 t=0 r=0 b=0
+[vo/gpu] Video borders: l=0 t=0 r=0 b=0
+[vo/gpu] Reported display depth: 10
+[cplayer] Starting playback...
+[af] [in] 48000Hz stereo 2ch floatp
+[af] [userspeed] 48000Hz stereo 2ch floatp
+[af] [userspeed] (disabled)
+[af] [convert] 48000Hz stereo 2ch floatp
+[ao] Trying audio driver 'pipewire'
+[ao/pipewire] requested format: 48000 Hz, stereo channels, floatp
+[ao/pipewire] Headers version: 1.4.2
+[ao/pipewire] Library version: 1.6.1
+[ao/pipewire] Core user: vf
+[ao/pipewire] Core host: ASUS-K53SD
+[ao/pipewire] Core version: 1.6.1
+[ao/pipewire] Core name: pipewire-0
+[ao/pipewire] using soft-buffer of 9600 samples.
+AO: [pipewire] 48000Hz stereo 2ch floatp
+[cplayer] AO: Description: PipeWire audio output
+[af] [convert] (disabled)
+[af] [out] 48000Hz stereo 2ch floatp
+[cplayer] audio ready
+[cplayer] starting audio playback
+[vo/gpu/wayland] Enabling idle inhibitor
+[cplayer] playback restart complete @ -0.000000, audio=playing, video=eof
+A: 00:00:00 / 00:06:22 (0%)Встроенной обложки нет. Добавляю заглушку: /home/vf/src/vf9/res/nocover.png
+
+[main] Invalid flag for option video-add: attach
+A: 00:00:00 / 00:06:22 (0%)
+[main] Valid flags are:
+A: 00:00:00 / 00:06:22 (0%)
+[main]     select
+A: 00:00:00 / 00:06:22 (0%)
+[main]     auto
+A: 00:00:00 / 00:06:22 (0%)
+[main]     cached
+A: 00:00:00 / 00:06:22 (0%)
+[main]     hearing-impaired
+A: 00:00:00 / 00:06:22 (0%)
+[main]     visual-impaired
+A: 00:00:00 / 00:06:22 (0%)
+[main]     attached-picture
+A: 00:00:00 / 00:06:22 (0%)
+[main] Flags can usually be combined with '+'.
+A: 00:00:00 / 00:06:22 (0%)
+[main] Command video-add: argument flags can't be parsed: option parameter could not be parsed.
+A: 00:00:00 / 00:06:22 (0%)cast(SDL_EventType)32769
+cast(SDL_EventType)32769
+cast(SDL_EventType)32769
+cast(SDL_EventType)32769
+SDL_EVENT_WINDOW_MOUSE_LEAVE 4
+
+[vo/gpu/wayland] Given data offer with mime type text/plain
+A: 00:00:00 / 00:06:22 (0%)
+[vo/gpu/wayland] Given data offer with mime type text/plain;charset=utf-8
+A: 00:00:00 / 00:06:22 (0%)SDL_EVENT_WINDOW_FOCUS_LOST 4
+
+[vo/gpu/wayland] Read 49 bytes from the data offer fd
+A: 00:00:00 / 00:06:22 (0%)
+A: 00:00:01 / 00:06:22 (0%)
+A: 00:00:01 / 00:06:22 (1%)
+A: 00:00:02 / 00:06:22 (1%)
+A: 00:00:03 / 00:06:22 (1%)
+A: 00:00:04 / 00:06:22 (1%)
+A: 00:00:05 / 00:06:22 (1%)SDL_EVENT_WINDOW_EXPOSED 4
+SDL_EVENT_WINDOW_EXPOSED 4
+
+A: 00:00:05 / 00:06:22 (2%)
+A: 00:00:06 / 00:06:22 (2%)SDL_EVENT_WINDOW_FOCUS_GAINED 4
+SDL_EVENT_CLIPBOARD_UPDATE
+SDL_EVENT_WINDOW_CLOSE_REQUESTED 4
+SDL_EVENT_QUIT
+Уничтожение контекста libmpv...
+
+[cplayer] EOF code: 5  
+A: 00:00:06 / 00:06:22 (2%)
+[vo/gpu/wayland] Disabling the idle inhibitor
+A: 00:00:06 / 00:06:22 (2%)
+[cplayer] finished playback, success (reason 3)
+[cplayer] Running hook: ytdl_hook/on_after_end_file
+[vo/gpu/wayland] Deregistering output AUO 0x26ec (0x4)
+[vo/gpu/wayland] Deregistering seat 0x10
+[Finished in 15.2s]
