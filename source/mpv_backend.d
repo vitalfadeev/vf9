@@ -7,6 +7,10 @@ import std.string : stringToUTF8 = toStringz;
 import std.file : thisExePath, exists;
 import std.path : dirName, buildPath;
 
+extern(C) ulong mpv_render_context_update(mpv_render_context* ctx);
+enum MPV_RENDER_UPDATE_FRAME = 1;
+enum MPV_EVENT_FILE_LOADED = 8;
+
 struct mpv_handle;
 
 extern(C) {
@@ -40,10 +44,62 @@ extern(C) void on_mpv_wakeup(void* dData) {
     SDL_PushEvent(&event); 
 }
 
+// Непрозрачный тип для контекста рендеринга
+struct mpv_render_context;
+
+// Тип для функции обратного вызова обновления
+alias mpv_render_update_fn = extern(C) void function(void* cb_ctx);
+
+// Структура для передачи параметров
+struct mpv_render_param {
+    int type;
+    void* data;
+}
+
+// Структура для инициализации OpenGL
+struct mpv_opengl_init_params {
+    extern(C) void* function(void* ctx, const(char)* name) get_proc_address;
+    void* get_proc_address_ctx;
+}
+
+// Структура для указания целевого FBO
+struct mpv_opengl_fbo {
+    int fbo;
+    int w;
+    int h;
+    int internal_format;
+}
+
+// Константы (значения взяты из render.h)
+enum MPV_RENDER_PARAM_API_TYPE = 1;
+enum MPV_RENDER_PARAM_OPENGL_INIT_PARAMS = 2;
+enum MPV_RENDER_PARAM_OPENGL_FBO = 3;
+enum MPV_RENDER_PARAM_FLIP_Y = 4;
+enum MPV_RENDER_PARAM_INVALID = 0;
+
+enum MPV_RENDER_API_TYPE_OPENGL = "opengl";
+
+extern(C) {
+    // ... ваши существующие объявления ...
+
+    int mpv_render_context_create(mpv_render_context** res, mpv_handle* mpv, mpv_render_param* params);
+    void mpv_render_context_free(mpv_render_context* ctx);
+    void mpv_render_context_set_update_callback(mpv_render_context* ctx, mpv_render_update_fn callback, void* callback_ctx);
+    int mpv_render_context_render(mpv_render_context* ctx, mpv_render_param* params);
+}
+
+
 struct Mpv_backend {
     mpv_handle* mpv;
     string current_playing_id; 
     string absoluteCoverPath;
+    // В struct Mpv_backend
+    mpv_render_context* renderCtx;
+    mpv_opengl_fbo fboInfo; // Информация о целевом FBO
+    uint fboTextureId;      // ID текстуры, в которую рендерит mpv
+    uint fboId;
+    int  videoWidth  = 800;
+    int  videoHeight = 600;
 
     void _init () {
         writeln("Инициализация библиотеки libmpv...");
@@ -53,11 +109,18 @@ struct Mpv_backend {
         mpv_set_wakeup_callback(mpv, &on_mpv_wakeup, null);
     }
 
-    void _exit () {
+    void _exit() {
         writeln("Уничтожение контекста libmpv...");
-        mpv_terminate_destroy(mpv);
+        if (renderCtx) {
+            mpv_render_context_free(renderCtx);
+            renderCtx = null;
+        }
+        if (mpv) {
+            mpv_terminate_destroy(mpv);
+            mpv = null;
+        }
     }
-    
+
     void config () {
         import std.file : thisExePath, exists;
         import std.path : dirName, buildPath;
@@ -70,7 +133,7 @@ struct Mpv_backend {
         mpv_set_option_string(mpv, "input-bindings", "MBTN_LEFT cycle pause");
 
         // Оконный режим и принудительное удержание окна для звука
-        mpv_set_option_string(mpv, "force-window", "yes");
+        //mpv_set_option_string(mpv, "force-window", "yes");
         mpv_set_option_string(mpv, "audio-display", "embedded-first");
         mpv_set_option_string(mpv, "clipboard", "no");
 
@@ -83,7 +146,7 @@ struct Mpv_backend {
         mpv_set_option_string(mpv, "dscale", "bilinear");
 
         // Задаём фиксированный размер окна 800x600
-        mpv_set_option_string(mpv, "geometry", "800x600");
+        //mpv_set_option_string(mpv, "geometry", "800x600");
         // Запрещаем mpv автоматически менять размер окна при смене файла
         mpv_set_option_string(mpv, "auto-window-resize", "no");
         mpv_set_option_string(mpv, "keepaspect-window", "no");
@@ -108,7 +171,9 @@ struct Mpv_backend {
             writeln("ОШИБКА: Файл res/nocover.png не найден!");
         }
 
-        mpv_set_option_string(mpv, "vo", "gpu");
+        //mpv_set_option_string(mpv, "vo", "gpu");
+        // Указываем mpv, что рендеринг будет осуществляться через внешний API
+        mpv_set_option_string(mpv, "vo", "libmpv");
     }
 
     void init_player () {
@@ -120,38 +185,28 @@ struct Mpv_backend {
 
     // В struct Mpv_backend
 
-    bool has_embedded_cover() {
+    bool has_video_track() {
         if (!mpv) return false;
-        // Запрашиваем список треков в формате JSON
         const(char)* jsonCStr = mpv_get_property_string(mpv, "track-list");
         if (jsonCStr is null) return false;
-        
         scope(exit) mpv_free(cast(void*)jsonCStr);
-        import std.json : parseJSON, JSONValue;
+
+        import std.json : parseJSON, JSONType;
         import std.conv : to;
-        import std.json : parseJSON, JSONValue, JSONType;
 
         try {
             auto json = parseJSON(jsonCStr.to!string);
             if (json.type != JSONType.array) return false;
-            
             foreach (track; json.array) {
-                // Проверяем, есть ли видеотрек, помеченный как обложка (albumart)
-                if (track["type"].str == "video" && 
-                    track.object.get("albumart", JSONValue(false)).get!bool) {
-                    return true;
-                }
+                if (track["type"].str == "video") return true;
             }
-        } catch (Exception e) {
-            // В случае ошибки парсинга считаем, что обложки нет
-        }
+        } catch (Exception e) {}
         return false;
     }
 
     void play_file(string video_file) {
         writeln("Запуск воспроизведения: ", video_file);
-        current_playing_id = video_file; 
-
+        current_playing_id = video_file;
         const(char)*[] cArgs = [
             "loadfile".stringToUTF8,
             video_file.stringToUTF8,
@@ -159,24 +214,6 @@ struct Mpv_backend {
             null
         ];
         mpv_command(mpv, cArgs.ptr);
-
-        // После загрузки проверяем и добавляем заглушку, если нужно
-        // Небольшая задержка может потребоваться, чтобы mpv успел распарсить файл.
-        // В идеале это стоит делать по событию MPV_EVENT_FILE_LOADED.
-        import core.thread : Thread;
-        import core.time : msecs;
-        Thread.sleep(100.msecs); // Упрощённый вариант
-
-        if (!has_embedded_cover() && exists(absoluteCoverPath)) {
-            writeln("Встроенной обложки нет. Добавляю заглушку: ", absoluteCoverPath);
-            const(char)*[] coverArgs = [
-                "video-add".stringToUTF8,
-                absoluteCoverPath.stringToUTF8,
-                "attached-picture".stringToUTF8, // Флаг, помечающий трек как обложку                null
-                "no cover".stringToUTF8, // title
-            ];
-            mpv_command(mpv, coverArgs.ptr);
-        }
     }
 
     void drain_events() {
@@ -196,4 +233,142 @@ struct Mpv_backend {
         ];
         mpv_command(mpv, cArgs.ptr);
     }
+
+    void init_render_context() {
+        if (!mpv) return;
+
+        // 1. Подготавливаем параметры инициализации OpenGL
+        auto glInitParams = mpv_opengl_init_params(
+            // В SDL3 эта функция может называться иначе, проверьте биндинги
+            // В C это SDL_GL_GetProcAddress
+            &get_proc_address_sdl,
+            null
+        );
+
+        mpv_render_param[] params = [
+            mpv_render_param(MPV_RENDER_PARAM_API_TYPE, cast(void*)MPV_RENDER_API_TYPE_OPENGL.ptr),
+            mpv_render_param(MPV_RENDER_PARAM_OPENGL_INIT_PARAMS, &glInitParams),
+            mpv_render_param(MPV_RENDER_PARAM_INVALID, null)
+        ];
+
+        // 2. Создаем контекст рендеринга
+        if (mpv_render_context_create(&renderCtx, mpv, params.ptr) < 0) {
+            writeln("Не удалось создать mpv render context");
+            return;
+        }
+
+        // 3. Устанавливаем колбэк, который будет вызываться, когда доступен новый кадр
+        mpv_render_context_set_update_callback(renderCtx, &on_render_update, null);
+    }
+
+    // Вспомогательная функция для получения адресов GL-функций
+    static
+    extern(C) void* get_proc_address_sdl(void* ctx, const(char)* name) {
+        import vf.sdl.importc_sdl : SDL_GL_GetProcAddress;
+        return SDL_GL_GetProcAddress(name);
+    }
+
+    // Колбэк, который будет вызываться из потока mpv
+    static
+    extern(C) void on_render_update(void* cb_ctx) {
+        // Здесь мы можем просто выставить флаг, что нужно перерисовать кадр
+        // или отправить событие, как вы делали это раньше через SDL_PushEvent
+        import vf.sdl.importc_sdl : SDL_PushEvent, SDL_Event;
+        import vf.ui.ui_events : UI_EVENT_REQUEST_UPDATE;
+        SDL_Event evt;
+        evt.type = UI_EVENT_REQUEST_UPDATE;
+        SDL_PushEvent(&evt);
+    }
+
+    void render_frame() {
+        if (!renderCtx) return;
+        if ((mpv_render_context_update(renderCtx) & MPV_RENDER_UPDATE_FRAME) == 0)
+            return;
+
+        // Указываем mpv, в какой FBO и какого размера рисовать
+        fboInfo.fbo = cast(int)fboId; // ID вашего FBO
+        fboInfo.w = cast(int)videoWidth; // Ширина области рендеринга
+        fboInfo.h = cast(int)videoHeight; // Высота области рендеринга
+        fboInfo.internal_format = 0; // Обычно 0
+
+        int flip = 1;
+        mpv_render_param[] params = [
+            mpv_render_param(MPV_RENDER_PARAM_OPENGL_FBO, &fboInfo),
+            mpv_render_param(MPV_RENDER_PARAM_FLIP_Y,    &flip),
+            mpv_render_param(MPV_RENDER_PARAM_INVALID,   null)
+        ];
+
+        // Выполняем рендеринг
+        int result = mpv_render_context_render(renderCtx, params.ptr);
+        if (result < 0) {
+            writeln("Ошибка рендеринга кадра mpv: ", result);
+        }
+    }
+
+    void create_fbo(int w, int h, uint gl_tex) {
+        import vf.sdl.importc_sdl : SDL_GL_GetProcAddress;
+        import std.conv : to;
+
+        if (gl_tex == 0) {
+            writeln("create_fbo: пустой GL texture id");
+            return;
+        }
+
+        alias GenFramebuffersFn    = void function(int, uint*);
+        alias BindFramebufferFn    = void function(uint, uint);
+        alias FramebufferTexFn     = void function(uint, uint, uint, uint, int);
+        alias CheckFboStatusFn     = uint function(uint);
+
+        auto glGenFramebuffers        = cast(GenFramebuffersFn)   SDL_GL_GetProcAddress("glGenFramebuffers");
+        auto glBindFramebuffer        = cast(BindFramebufferFn)   SDL_GL_GetProcAddress("glBindFramebuffer");
+        auto glFramebufferTexture2D   = cast(FramebufferTexFn)    SDL_GL_GetProcAddress("glFramebufferTexture2D");
+        auto glCheckFramebufferStatus = cast(CheckFboStatusFn)    SDL_GL_GetProcAddress("glCheckFramebufferStatus");
+
+        enum GL_TEXTURE_2D           = 0x0DE1;
+        enum GL_FRAMEBUFFER          = 0x8D40;
+        enum GL_COLOR_ATTACHMENT0    = 0x8CE0;
+        enum GL_FRAMEBUFFER_COMPLETE = 0x8CD5;
+
+        uint fbo;
+        glGenFramebuffers(1, &fbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                               GL_TEXTURE_2D, gl_tex, 0);
+
+        auto status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        if (status != GL_FRAMEBUFFER_COMPLETE) {
+            writeln("FBO не создан, статус: 0x", status.to!string(16));
+            return;
+        }
+
+        fboId        = fbo;
+        fboTextureId = gl_tex;
+        videoWidth   = w;
+        videoHeight  = h;
+    }
+
+    void process_events() {
+        while (mpv) {
+            auto ev = mpv_wait_event(mpv, 0);
+            if (ev.event_id == 0) break;
+            final switch (ev.event_id) {
+                case MPV_EVENT_FILE_LOADED:
+                    if (!has_video_track() && exists(absoluteCoverPath)) {
+                        writeln("Аудио без обложки. Добавляю заглушку: ", absoluteCoverPath);
+                        const(char)*[] coverArgs = [
+                            "video-add".stringToUTF8,
+                            absoluteCoverPath.stringToUTF8,
+                            "attached-picture".stringToUTF8,
+                            "no cover".stringToUTF8,
+                            null
+                        ];
+                        mpv_command(mpv, coverArgs.ptr);
+                    }
+                    break;
+            }
+        }
+    }
 }
+

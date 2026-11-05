@@ -3,6 +3,8 @@ module vf.ui.renderer;
 import vf.std.color        : Color;
 import vf.std.xywh : Xywh;
 import vf.ui.window;
+import std.stdio : writeln;
+import std.string : toStringz;   // добавьте в начало модуля или локально
 version (SDLTTF) import vf.sdl.fonts;
 version (SDLTTF) import vf.sdl.importc_sdl_ttf;
 
@@ -10,6 +12,9 @@ class
 Renderer {
     SDL_Renderer* _renderer;
     TTF_TextEngine* _engine;
+    // В Renderer
+    SDL_Texture* video_texture;
+    uint         video_gl_tex;
 
     this (Window window) {
         _renderer = SDL_CreateRenderer (window._sdl_window,null);
@@ -89,4 +94,31 @@ Renderer {
     rasterize () {
         SDL_RenderPresent (_renderer);        
     }
+
+
+    void create_video_texture(int w, int h) {
+        import vf.sdl.importc_sdl;
+        video_texture = SDL_CreateTexture(_renderer,
+            SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, w, h);
+        if (video_texture is null) {
+            writeln("SDL_CreateTexture failed: ", SDL_GetError());
+            return;
+        }
+        auto props = SDL_GetTextureProperties(video_texture);
+        video_gl_tex = cast(uint) SDL_GetNumberProperty(
+            props,
+            SDL_PROP_TEXTURE_OPENGL_TEXTURE_NUMBER.toStringz,
+            0L
+        );
+        writeln("video_gl_tex = ", video_gl_tex);
+    }
+
+    void draw_video(int x, int y, int w, int h) {
+        if (video_texture is null) return;
+        SDL_FRect dst;
+        dst.x = cast(float)x; dst.y = cast(float)y;
+        dst.w = cast(float)w; dst.h = cast(float)h;
+        SDL_RenderTexture(_renderer, video_texture, null, &dst);
+    }
+
 }

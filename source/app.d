@@ -43,6 +43,7 @@ App {
 		INIT ();
 		INIT_WINDOW ();
 		INIT_RENDERER (window);
+		INIT_GL ();
 		INIT_FONTS ();
 		mpv_backend._init ();
 		scope(exit) {
@@ -50,6 +51,8 @@ App {
 		}
 		mpv_backend.config ();
 		mpv_backend.init_player ();
+		mpv_backend.init_render_context ();
+		mpv_backend.create_fbo (800, 600, renderer.video_gl_tex);
 
 		auto page = new Page ();
 		window.add (page);
@@ -126,7 +129,8 @@ App {
 	        case UI_EVENT_REQUEST_UPDATE: 
 	            // 1. Очищаем очередь событий mpv в контексте главного потока
 	            mpv_backend.drain_events(); 
-	            
+	            mpv_backend.render_frame();   // <-- сначала mpv заполняет FBO-текстуру
+
 	            // 2. Логика подсветки активного трека
 	            if (listview) {
 	                foreach (control; listview.controls.norecursive) { // Предполагается, что у ListView есть доступ к дочерним элементам
@@ -142,15 +146,18 @@ App {
 	                }
 	            }
 	            
-	            window.update(renderer); 
-	            window.draw (renderer); 
+	            //window.update(renderer); 
+	            //window.draw (renderer); 
+	            // video_texture уже нарисована в FBO — рисуем её поверх UI:
+	            renderer.draw_video(0, 0, 800, 600);
+	            renderer.rasterize();
 	            break;
 
 	        //case MPV_EVENT_FILE_LOADED:
 	        //    // Файл полностью загружен, можно проверять обложку
 	        //    // Здесь вызывайте логику добавления заглушки
 	        //    break;
-	                	            
+
 	        default: 
 	    }
 
@@ -168,8 +175,8 @@ App {
 	INIT_WINDOW () {
 		window = new Window (
 			0,0, 800,600, 
-			SDL_WINDOW_RESIZABLE
-			//| SDL_WINDOW_OPENGL
+			SDL_WINDOW_RESIZABLE 
+			| SDL_WINDOW_OPENGL
 			//SDL_WINDOW_BORDERLESS
 			//| SDL_WINDOW_ALWAYS_ON_TOP
 			//| SDL_WINDOW_UTILITY
@@ -177,6 +184,20 @@ App {
 			// | SDL_WINDOW_VULKAN
 			// | SDL_WINDOW_ALLOW_HIGHDPI
 		);
+	}
+
+	// Где-то после INIT_WINDOW, возможно в новом методе INIT_GL
+	import vf.sdl.importc_sdl : SDL_GLContext, SDL_GL_CreateContext, SDL_GL_MakeCurrent;
+
+	SDL_GLContext glContext;
+	void 
+	INIT_GL() {
+		// В INIT_GL
+		import vf.sdl.importc_sdl : SDL_GL_SetAttribute, SDL_GL_SHARE_WITH_CURRENT_CONTEXT;
+
+		SDL_GL_SetAttribute(SDL_GL_SHARE_WITH_CURRENT_CONTEXT, 1);
+		glContext = SDL_GL_CreateContext(window._sdl_window);
+		SDL_GL_MakeCurrent(window._sdl_window, glContext);
 	}
 
 	void
